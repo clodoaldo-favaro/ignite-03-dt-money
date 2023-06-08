@@ -1,9 +1,10 @@
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as Dialog from '@radix-ui/react-dialog';
 import { X, ArrowCircleUp, ArrowCircleDown } from 'phosphor-react';
+import { useContext } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import * as z from 'zod';
-import { api } from '../../lib/axios';
+import { TransactionsContext } from '../../contexts/TransactionsContext';
 import { Overlay, Content, CloseButton, TransactionType, TransactionTypeButton } from './styles';
 
 const newTransactionFormSchema = z.object({
@@ -16,11 +17,14 @@ const newTransactionFormSchema = z.object({
 type NewTransactionFormInputs = z.infer<typeof newTransactionFormSchema>
 
 export function NewTransactionModal() {
+	const { createTransaction } = useContext(TransactionsContext)
+	
 	const { 
 		control,
 		register, 
 		handleSubmit, 
-		formState: { isSubmitting } 
+		formState: { isSubmitting },
+		reset,
 	} = useForm<NewTransactionFormInputs>({
 		resolver: zodResolver(newTransactionFormSchema),
 		defaultValues: {
@@ -29,20 +33,9 @@ export function NewTransactionModal() {
 	})
 
 	async function handleCreateNewTransaction(data: NewTransactionFormInputs) {
-		const { description, price, category, type } = data
+		await createTransaction(data)
 		
-		await api.post('transactions', {
-			description,
-			price,
-			category,
-			type,
-			createdAt: new Date()
-		})
-		
-		//It works, but it's kind of unclear what's being sent to the api
-		// await api.post('transactions', {
-		// 	...data
-		// })
+		reset()
 	}
 	
 	return (
