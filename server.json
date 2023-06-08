@@ -1,5 +1,5 @@
 {
-	"transactions": [
+  "transactions": [
     {
       "id": 1,
       "description": "Desenvolvimento de site",
@@ -23,6 +23,14 @@
       "category": "Educação",
       "price": 1980,
       "createdAt": "2023-06-07T19:30:12.546Z"
+    },
+    {
+      "description": "Churrasco do Faustão",
+      "price": 5000,
+      "category": "Alimentação",
+      "type": "outcome",
+      "createdAt": "2023-06-08T04:09:00.611Z",
+      "id": 4
     }
   ]
 }

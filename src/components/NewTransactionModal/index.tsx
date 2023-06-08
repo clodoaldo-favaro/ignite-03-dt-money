@@ -3,6 +3,7 @@ import * as Dialog from '@radix-ui/react-dialog';
 import { X, ArrowCircleUp, ArrowCircleDown } from 'phosphor-react';
 import { Controller, useForm } from 'react-hook-form';
 import * as z from 'zod';
+import { api } from '../../lib/axios';
 import { Overlay, Content, CloseButton, TransactionType, TransactionTypeButton } from './styles';
 
 const newTransactionFormSchema = z.object({
@@ -28,9 +29,20 @@ export function NewTransactionModal() {
 	})
 
 	async function handleCreateNewTransaction(data: NewTransactionFormInputs) {
-		debugger;
-		await new Promise(resolve => setTimeout(resolve, 2000));
-		console.log(data);
+		const { description, price, category, type } = data
+		
+		await api.post('transactions', {
+			description,
+			price,
+			category,
+			type,
+			createdAt: new Date()
+		})
+		
+		//It works, but it's kind of unclear what's being sent to the api
+		// await api.post('transactions', {
+		// 	...data
+		// })
 	}
 	
 	return (
